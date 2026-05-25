@@ -87,9 +87,13 @@ Infraestructura lógica testeada de forma virtual en un entorno .NET 8.0 para co
 
 ### Prueba #4: Simulación de Colisión Simultánea (Motor de Arbitraje)
 * **Condición:** Dos haces intersectan la misma coordenada en el Centro a la vez (DATOS_BIBLIOTECA vs INPUT_MOUSE en Capa 1).
-* **Resultado:** Conflicto resuelto por pura física analonígea usando la ecuación P = (V x M) + R. La onda de mayor peso (17 vs 11) altera el cristal primero. El periférico es desplazado a la Capa 2 con una penalización exacta de un micro-ciclo (+0.006s). Latencia final: 0.066s.
+* **Resultado:** Conflicto resuelto por pura física analógica usando la ecuación P = (V x M) + R. La onda de mayor peso (17 vs 11) altera el cristal primero. El periférico es desplazado a la Capa 2 con una penalización exacta de un micro-ciclo (+0.006s). Latencia final: 0.066s.
 
-### Prueba #5: Protocolo de Arranque (Inundación Alfa)
+### Prueba #5: Protocolo de Migración Neuronal en Caliente
+* **Condición:** Concentración masiva de carga lumínica en el nodo periférico (0,0,0) hasta alcanzar el umbral de fatiga molecular del 50%.
+* **Resultado:** El Centro Protegido intercepta el desgaste atómico y ordena una reconfiguración dinámica en caliente. El nodo fatigado rota hacia el centro del cubo para su disipación térmica y una partícula fresca toma su lugar en la frontera de entrada, manteniendo el rendimiento plano.
+
+### Prueba #6: Protocolo de Arranque (Inundación Alfa)
 Validación de la jerarquía de menor resistencia física de la matriz perimetral de TbFeCo:
 ```text
 [INICIANDO INUNDACIÓN ALFA - ARRANQUE FÍSICO]
