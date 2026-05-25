@@ -69,7 +69,7 @@ Diseñado para alcanzar una vida útil estimada de **20 años de operación cont
 
 ## ─── VI. REPORTE DE VALIDACIÓN LOGICA (SIMULACIÓN C#) ───
 
-Infraestructura lógica testeada de forma virtual en un entorno .NET 8.0 para comprobar la viabilidad geométrica del sistema:
+Infraestructura lógica testeada de forma virtual en un entorno .NET 8.0 para comprobar la viabilidad geométrica del sistema bajo estrés:
 
 ### Prueba #1: Tránsito en Entorno Limpio
 * **Condición:** Matriz cúbica perfecta sin obstrucciones.
@@ -85,7 +85,11 @@ Infraestructura lógica testeada de forma virtual en un entorno .NET 8.0 para co
 * **Condición:** Fractura total simulada mediante un muro infranqueable en todo el plano X = 3.
 * **Resultado:** El sistema deniega el cálculo aleatorio. Al detectar el bloqueo absoluto, activa el Protocolo Rompeolas, guiando la onda residual a las paredes para su disipación térmica completa en 0.025 segundos lógicos, aislando el daño sin crasheos.
 
-### Prueba #4: Protocolo de Arranque (Inundación Alfa)
+### Prueba #4: Simulación de Colisión Simultánea (Motor de Arbitraje)
+* **Condición:** Dos haces intersectan la misma coordenada en el Centro a la vez (DATOS_BIBLIOTECA vs INPUT_MOUSE en Capa 1).
+* **Resultado:** Conflicto resuelto por pura física analonígea usando la ecuación P = (V x M) + R. La onda de mayor peso (17 vs 11) altera el cristal primero. El periférico es desplazado a la Capa 2 con una penalización exacta de un micro-ciclo (+0.006s). Latencia final: 0.066s.
+
+### Prueba #5: Protocolo de Arranque (Inundación Alfa)
 Validación de la jerarquía de menor resistencia física de la matriz perimetral de TbFeCo:
 ```text
 [INICIANDO INUNDACIÓN ALFA - ARRANQUE FÍSICO]
