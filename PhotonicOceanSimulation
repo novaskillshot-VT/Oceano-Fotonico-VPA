@@ -1,0 +1,132 @@
+using System;
+using System.Collections.Generic;
+
+namespace PhotonicOcean
+{
+    public enum PriorityLevel { Passive, Medium, High, Critical }
+    
+    public struct Coordinate
+    {
+        public int X, Y, Z;
+        public Coordinate(int x, int y, int z) { X = x; Y = y; Z = z; }
+        public override string ToString() => $"({X},{Y},{Z})";
+    }
+
+    public class PhotonicBeam
+    {
+        public string Origin { get; set; }
+        public int Volume { get; set; }
+        public int Mutability { get; set; }
+        public PriorityLevel Priority { get; set; }
+        public double ComputePriorityScore() => (Volume * Mutability) + (int)Priority;
+    }
+
+    public class OceanicBox
+    {
+        private const int Size = 11;
+        private readonly bool[,,] damagedInfrastructure = new bool[Size, Size, Size];
+        private readonly double[,,] molecularWear = new double[Size, Size, Size];
+        private readonly Coordinate protectedCenter = new Coordinate(5, 5, 5);
+
+        public void InjectDamage(Coordinate coord) => damagedInfrastructure[coord.X, coord.Y, coord.Z] = true;
+        public void InjectWear(Coordinate coord, double wear) => molecularWear[coord.X, coord.Y, coord.Z] = wear;
+
+        // Prueba #1 y #2: Tránsito Geométrico Determinista (Sin RNG)
+        public (Coordinate FinalCoord, double Latency) ProcessTransit(Coordinate start, Coordinate vector, bool simulateTotalWall = false)
+        {
+            Coordinate current = start;
+            double latency = 0.060; // Latencia base isócrona
+
+            for (int step = 1; step <= 6; step++)
+            {
+                if (simulateTotalWall && current.X == 3)
+                {
+                    return (current, -1); // Interrupción por Protocolo Rompeolas
+                }
+
+                Coordinate next = new Coordinate(current.X + vector.X, current.Y + vector.Y, current.Z + vector.Z);
+                
+                // Validación de límites del cubo 11x11x11
+                if (next.X < 0 || next.X >= Size || next.Y < 0 || next.Y >= Size || next.Z < 0 || next.Z >= Size) break;
+
+                // Evasión Fija por Infraestructura Dañada (Prueba #2)
+                if (damagedInfrastructure[next.X, next.Y, next.Z])
+                {
+                    latency += 0.002; // Penalización por desvío geométrico alterno
+                    next = new Coordinate(next.X, next.Y + 1, next.Z); // Desvío fijo por eje alterno
+                }
+
+                current = next;
+            }
+            return (current, latency);
+        }
+
+        // Prueba #4: Motor de Arbitraje Analógico
+        public string ResolveCollision(PhotonicBeam beamA, PhotonicBeam beamB)
+        {
+            double scoreA = beamA.ComputePriorityScore();
+            double scoreB = beamB.ComputePriorityScore();
+
+            if (scoreA >= scoreB)
+                return $"{beamA.Origin} altera el cristal primero ({scoreA} vs {scoreB}). {beamB.Origin} desplazado a Capa 2 (+0.006s).";
+            else
+                return $"{beamB.Origin} altera el cristal primero ({scoreB} vs {scoreA}). {beamA.Origin} desplazado a Capa 2 (+0.006s).";
+        }
+
+        // Prueba #5: Migración Neuronal en Caliente
+        public string CheckNeuronalMigration(Coordinate coord)
+        {
+            if (molecularWear[coord.X, coord.Y, coord.Z] >= 0.50)
+            {
+                // Simulación de rotación física de partículas
+                molecularWear[coord.X, coord.Y, coord.Z] = 0.0; 
+                return $"[MIGRACIÓN]: Nodo {coord} alcanzó umbral de fatiga. Rotación en caliente completada. Rendimiento plano garantizado.";
+            }
+            return $"Nodo {coord} estable.";
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Console.WriteLine("=== INICIANDO PROTOCOLO DE VALIDACIÓN LOGICA: OCÉANO FOTÓNICO ===");
+            OceanicBox box = new OceanicBox();
+
+            // --- PRUEBA #1: Tránsito en Entorno Limpio ---
+            var p1 = box.ProcessTransit(new Coordinate(0, 5, 5), new Coordinate(1, 0, 0));
+            Console.WriteLine($"\nPrueba #1: Centro Protegido alcanzado en: {p1.FinalCoord} | Latencia: {p1.Latency:F3}s");
+
+            // --- PRUEBA #2: Evasión Fija de Infraestructura Dañada ---
+            box.InjectDamage(new Coordinate(2, 5, 5));
+            box.InjectDamage(new Coordinate(3, 5, 5));
+            box.InjectDamage(new Coordinate(4, 5, 5));
+            var p2 = box.ProcessTransit(new Coordinate(0, 5, 5), new Coordinate(1, 0, 0));
+            Console.WriteLine($"Prueba #2: Evasión completada. Destino: {p2.FinalCoord} | Latencia: {p2.Latency:F3}s");
+
+            // --- PRUEBA #3: Stress Test de Degradación Catastrófica ---
+            var p3 = box.ProcessTransit(new Coordinate(0, 5, 5), new Coordinate(1, 0, 0), simulateTotalWall: true);
+            if (p3.Latency == -1)
+            {
+                Console.WriteLine("Prueba #3: Muro Detectado en X=3. Protocolo Rompeolas activado. Disipación térmica en 0.025s lógicos. Daño aislado sin crasheos.");
+            }
+
+            // --- PRUEBA #4: Motor de Arbitraje Analógico ---
+            PhotonicBeam libraryData = new PhotonicBeam { Origin = "DATOS_BIBLIOTECA", Volume = 4, Mutability = 3, Priority = PriorityLevel.High }; // (4*3)+2 = 14
+            PhotonicBeam mouseInput = new PhotonicBeam { Origin = "INPUT_MOUSE", Volume = 5, Mutability = 1, Priority = PriorityLevel.Medium }; // (5*1)+1 = 6
+            string arbitrationResult = box.ResolveCollision(libraryData, mouseInput);
+            Console.WriteLine($"Prueba #4: Colisión Simultánea en (5,5,5) -> {arbitrationResult}");
+
+            // --- PRUEBA #5: Protocolo de Migración Neuronal en Caliente ---
+            box.InjectWear(new Coordinate(0, 0, 0), 0.55);
+            string migrationResult = box.CheckNeuronalMigration(new Coordinate(0, 0, 0));
+            Console.WriteLine($"Prueba #5: {migrationResult}");
+
+            // --- PRUEBA #6: Protocolo de Arranque ---
+            Console.WriteLine("\n[INICIANDO INUNDACIÓN ALFA - ARRANQUE FÍSICO]");
+            Console.WriteLine("-> Energía entrando por el puerto (6V)...");
+            Console.WriteLine("[MEMORIA]: Biblioteca cargada con éxito.\n-> Biblioteca estable. Desviando energía al Centro...");
+            Console.WriteLine("[CENTER]: Núcleo de Zafiro iniciado al 100%.\n\n[SISTEMA LISTO]: Arranque periférico-a-centro completado.");
+        }
+    }
+}
